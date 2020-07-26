@@ -302,6 +302,12 @@ bool unload_filament(const float &unload_length, const bool show_lcd/*=false*/,
     if (show_lcd) lcd_pause_show_message(PAUSE_MESSAGE_UNLOAD, mode);
   #endif
 
+  // NM: add in extra extrusion to get rid of blob
+  // https://github.com/MarlinFirmware/Marlin/issues/16545
+  unscaled_e_move((FILAMENT_CHANGE_INITIAL_EXTRUSION_LENGTH) * mix_multiplier, (ADVANCED_PAUSE_PURGE_FEEDRATE) * mix_multiplier);
+  safe_delay(FILAMENT_CHANGE_INITIAL_EXTRUSION_DELAY);
+  //unscaled_e_move(-(FILAMENT_CHANGE_INITIAL_EXTRUSION_LENGTH) * mix_multiplier, (FILAMENT_CHANGE_SLOW_UNLOAD_FEEDRATE) * mix_multiplier);
+
   // Retract filament
   unscaled_e_move(-(FILAMENT_UNLOAD_PURGE_RETRACT) * mix_multiplier, (PAUSE_PARK_RETRACT_FEEDRATE) * mix_multiplier);
 
